@@ -1,184 +1,385 @@
-/* ================================
-   Base Styles
-================================= */
-:root {
-  --bg-light: #f4f4f4;
-  --bg-dark: #121212;
-  --text-light: #121212;
-  --text-dark: #f4f4f4;
-  --primary: #88c0d0;
-  --secondary: #4c566a;
-  --accent: #5e81ac;
-  --tag-bg: #3b4252;
-  --input-bg: #2e3440;
-  --border: #444c5e;
-  --scroll-thumb: #5e81ac;
-  --scroll-track: #2e3440;
+/* ===============================
+   Reset & Base Styles
+=============================== */
+*, *::before, *::after {
+  box-sizing: border-box;
 }
 
-/* Light mode */
-body.light {
-  background: var(--bg-light);
-  color: var(--text-light);
-}
-
-/* Dark mode */
 body {
-  background: var(--bg-dark);
-  color: var(--text-dark);
   font-family: sans-serif;
-  margin: 0;
-  padding: 0;
-  display: flex;
-  height: 100vh;
-  overflow: hidden;
+  font-size: clamp(14px, 2vw, 16px);
+  margin: 20px;
+  background: #121212;
+  color: #ddd;
 }
 
-/* ================================
-   Sidebar
-================================= */
-#sidebar {
-  background: var(--input-bg);
-  padding: 20px;
-  width: 280px;
+h1 {
+  text-align: center;
+  margin: 0 auto 20px;
+  max-width: 1280px;
+  border-radius: 8px;
+}
+
+/* ===============================
+   Layout & Containers
+=============================== */
+.content-container {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
+  align-items: flex-start;
   gap: 20px;
-  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.3);
+  max-width: 1280px;
+  width: 100%;
+  margin: 60px auto 0;
+  padding: 0 10px;
 }
 
-#sidebar h1 {
-  margin: 0;
-  font-size: 24px;
-  color: var(--primary);
+.content-section {
+  flex-grow: 1;
+  width: 100%;
 }
 
-#import-file {
-  color: white;
-}
-
-#import-file::file-selector-button {
-  background: var(--accent);
+.content {
+  display: none;
   border: none;
-  padding: 5px 10px;
-  color: white;
-  cursor: pointer;
-}
-
-#import-file::file-selector-button:hover {
-  background: var(--primary);
-}
-
-.import-export,
-#platform-tabs,
-#add-game-form {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-#platform-tabs button {
-  background: var(--accent);
-  color: white;
-  border: none;
-  padding: 8px;
-  cursor: pointer;
-}
-
-#platform-tabs button:hover {
-  background: var(--primary);
-}
-
-/* ================================
-   Main Content
-================================= */
-#main-content {
-  flex: 1;
   padding: 20px;
-  overflow-y: auto;
+  background: #212121;
+  border-radius: 8px;
+  width: 100%;
+  max-width: 1280px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
-#main-content section {
-  margin-bottom: 40px;
+.content.active {
+  display: block;
 }
 
-#main-content h2 {
-  margin-bottom: 10px;
-  border-bottom: 1px solid var(--border);
-  padding-bottom: 5px;
-  color: var(--primary);
+.content ul {
+  color: #a0a0a0;
 }
 
 ul {
   list-style: none;
   padding: 0;
-  margin: 0;
 }
 
 li {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 8px;
-  background: var(--input-bg);
-  margin-bottom: 8px;
+  margin: 5px 0;
+}
+
+input[type="checkbox"]:checked + label {
+  text-decoration: line-through;
+  color: #555;
+}
+
+/* ===============================
+   Form Inputs
+=============================== */
+input[type="number"].year-input,
+select.year-input,
+select.month-input {
+  background: #1a1a1a;
+  color: #ccc;
+  border: none;
+  padding: 6px 8px;
   border-radius: 6px;
+  font-size: clamp(0.9em, 1.5vw, 0.95em);
+  margin-left: 10px;
+  width: 80px;
 }
 
-/* ================================
-   Inputs & Tags
-================================= */
-input,
-select {
-  background: var(--input-bg);
-  color: white;
-  border: 1px solid var(--border);
-  border-radius: 4px;
-  padding: 4px 6px;
+/* ===============================
+   Tags
+=============================== */
+.tag {
+  font-size: clamp(0.8em, 1.5vw, 0.95em);
+  padding: 4px 8px;
+  border-radius: 8px;
+  display: inline-block;
+  margin-left: 10px;
+  color: #121212;
 }
 
-input[type="number"] {
-  width: 60px;
+.tagCompleted { background: #4ADE80; }
+.tagNotStarted { background: #949494; }
+.tagInProgress { background: #0EA5E9; }
+.tagOnHold { background: #84CC16; }
+.tagDropped { background: #EF4444; }
+.tagDLC { background: #f7bf00; }
+
+.tagNote {
+  color: #aaa;
+  background: #1a1a1a;
+  padding: 4px 8px;
+  border-radius: 8px;
+  display: block;
+  margin-left: 20px;
+  margin-top: 4px;
+  width: fit-content;
+  max-width: 100%;
+  box-sizing: border-box;
+  word-wrap: break-word;
 }
 
-#add-game-form input,
-#add-game-form select,
-#add-game-form button {
+/* ===============================
+   Sidebar
+=============================== */
+.sidebar-wrapper {
+  width: 100%;
+  max-width: 324px;
+  height: 100%;
+  max-height: 496px;
+  flex-shrink: 0;
+  margin-bottom: 75px;
+}
+
+.sidebar {
+  background: #212121;
+  border-radius: 8px;
+  padding: 20px;
+  width: 100%;
+  color: #ccc;
+  font-size: clamp(0.9em, 1.5vw, 0.95em);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.sidebar h2 {
+  margin-bottom: 0;
+}
+
+.sidebar h3 {
+  margin-top: 20px;
+  color: #a0a0a0;
+}
+
+.sidebar a {
+  color: #88c0d0;
+  text-decoration: none;
+}
+
+.sidebar a:hover {
+  text-decoration: underline;
+}
+
+.profile-bg {
+  width: 50%;
+  aspect-ratio: 1 / 1;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  border-radius: 8px;
+  flex-shrink: 0;
+}
+
+/* ===============================
+   Tabs & Buttons
+=============================== */
+.tab-box,
+.tab-box2 {
+  background: #212121;
+  border-radius: 8px;
+  padding: 10px;
+  margin: 20px 0;
+}
+
+.tab-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
   width: 100%;
 }
 
-button {
-  background: var(--accent);
-  color: white;
-  border: none;
-  padding: 6px 10px;
+.tab-buttons2 {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 8px;
+  overflow-x: auto;
+}
+
+.tab-button {
+  padding: 10px;
+  background: #2a2a2a;
+  color: #ccc;
+  border-radius: 6px;
+  text-align: center;
   cursor: pointer;
+  transition: background 0.2s;
+  flex-shrink: 0;
+}
+
+.tab-button:hover,
+.tab-button.active {
+  background: #383838;
+  color: #f7bf00;
+}
+
+/* ===============================
+   Forms & Inputs
+=============================== */
+.add-form {
+  margin: 20px 0;
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.add-form input,
+.add-form select,
+.add-form button {
+  padding: 8px;
+  border-radius: 6px;
+  border: none;
+}
+
+.add-form input,
+.add-form select {
+  background: #1a1a1a;
+  color: #ccc;
+}
+
+.add-form button {
+  background: #383838;
+  color: #f7bf00;
+  cursor: pointer;
+}
+
+.remove-button {
+  margin-left: 10px;
+  background: #444;
+  color: #ccc;
+  border: none;
+  padding: 4px 8px;
   border-radius: 4px;
+  cursor: pointer;
 }
 
-button:hover {
-  background: var(--primary);
+.remove-button:hover {
+  background: #ff5c5c;
+  color: #fff;
 }
 
-.tag {
-  background: var(--tag-bg);
-  padding: 2px 6px;
-  border-radius: 4px;
-  font-size: 0.9em;
+/* ===============================
+   Stats Section
+=============================== */
+.stats-layout {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 20px;
 }
 
-/* ================================
-   Scrollbar
-================================= */
-::-webkit-scrollbar {
-  width: 8px;
+.stats-text {
+  flex: 1;
+  min-width: 200px;
 }
 
-::-webkit-scrollbar-track {
-  background: var(--scroll-track);
+.stats-chart {
+  flex-shrink: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
-::-webkit-scrollbar-thumb {
-  background: var(--scroll-thumb);
-  border-radius: 4px;
+/* ===============================
+   Scrollable List
+=============================== */
+.scrollable-list {
+  margin-top: 12px;
+  max-height: 400px;
+  overflow-y: auto;
+  padding-right: 8px;
+  scrollbar-color: #383838 #1a1a1a;
+}
+
+.progress {
+  padding-top: 8px;
+}
+
+/* ===============================
+   Light Mode Overrides
+=============================== */
+body.light-mode {
+  background: #EDEDED;
+  color: #121212;
+}
+
+body.light-mode .sidebar,
+body.light-mode .tab-box,
+body.light-mode .tab-box2,
+body.light-mode .content {
+  background: #DEDEDE;
+  color: #121212;
+}
+
+body.light-mode .content ul {
+  color: #212121;
+}
+
+body.light-mode .tab-button {
+  background: #D5D5D5;
+  color: #222;
+}
+
+body.light-mode .tab-button:hover,
+body.light-mode .tab-button.active {
+  background: #C7C7C7;
+  color: #3C09B3;
+}
+
+body.light-mode .add-form button {
+  background: #C7C7C7;
+  color: #3C09B3;
+}
+
+body.light-mode .remove-button {
+  background: #ddd;
+  color: #222;
+}
+
+body.light-mode .remove-button:hover {
+  background: #ff5c5c;
+  color: #fff;
+}
+
+body.light-mode .tagCompleted { background: #4ADE80; color: #000; }
+body.light-mode .tagNotStarted { background: #949494; color: #000; }
+body.light-mode .tagInProgress { background: #0EA5E9; color: #000; }
+body.light-mode .tagOnHold { background: #84CC16; color: #000; }
+
+body.light-mode .tagNote {
+  background: #eaeaea;
+  color: #333;
+}
+
+body.light-mode .profile-bg {
+  border: 2px solid #dcdcdc;
+}
+
+body.light-mode select,
+body.light-mode input {
+  background: #E5E5E5;
+  color: #121212;
+  border: 1px solid #ccc;
+}
+
+body.light-mode .scrollable-list {
+  scrollbar-color: #ccc #E5E5E5;
+}
+
+/* ===============================
+   Responsive
+=============================== */
+@media (max-width: 768px) {
+  .content-container {
+    flex-direction: column;
+  }
+  .sidebar-wrapper,
+  .content-section {
+    width: 100%;
+  }
 }
