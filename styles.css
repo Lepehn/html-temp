@@ -34,11 +34,6 @@ h1 {
   padding: 0 10px;
 }
 
-.content-section {
-  flex-grow: 1;
-  width: 100%;
-}
-
 .content {
   display: none;
   border: none;
@@ -66,11 +61,6 @@ ul {
 
 li {
   margin: 5px 0;
-}
-
-input[type="checkbox"]:checked + label {
-  text-decoration: line-through;
-  color: #555;
 }
 
 /* ===============================
@@ -166,7 +156,9 @@ select.month-input {
 
 .profile-bg {
   width: 50%;
+  height: 50%;
   aspect-ratio: 1 / 1;
+  background-image: url("https://cdn.discordapp.com/avatars/474408288914505738/62c637c9587dd2b5d501e2a57ca326b7.webp?size=512");
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
