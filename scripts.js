@@ -1,74 +1,101 @@
-// ================================
-// Initialization
-// ================================
-const platforms = ["PC", "PlayStation", "Xbox", "Switch"];
+const platforms = ["epic", "nintendo", "playstation", "steam", "xbox"];
 const statuses = ["Completed", "Not Started", "In Progress", "On Hold"];
-const platformTabs = document.getElementById("platform-tabs");
-const mainContent = document.getElementById("main-content");
 
+// Wait for DOM load
 document.addEventListener("DOMContentLoaded", () => {
-  platforms.forEach(createPlatformSection);
+  // Add event listeners to all add forms
+  document.querySelectorAll(".add-form").forEach(form => {
+    form.addEventListener("submit", e => {
+      e.preventDefault();
+      const platform = form.dataset.platform;
+      const titleInput = form.querySelector('input[type="text"]');
+      const statusSelect = form.querySelector('select');
+      const title = titleInput.value.trim();
+      const status = statusSelect.value;
+
+      if (!title) {
+        alert("Please enter a game title.");
+        return;
+      }
+
+      addGame(title, platform, status);
+      form.reset();
+    });
+  });
+
+  // Add event listeners to platform tab buttons for switching content
+  document.querySelectorAll(".tab-buttons2 .tab-button").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const target = btn.dataset.target;
+      // Show selected platform content, hide others
+      platforms.forEach(p => {
+        const el = document.getElementById(p);
+        if (el) el.classList.toggle("active", p === target);
+      });
+
+      // Set active tab style
+      document.querySelectorAll(".tab-buttons2 .tab-button").forEach(b => {
+        b.classList.toggle("active", b === btn);
+      });
+    });
+  });
+
+  // Add event listeners for sidebar tab buttons (ratings, stats)
+  document.querySelectorAll(".tab-buttons .tab-button[data-target]").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const target = btn.dataset.target;
+      document.querySelectorAll(".content").forEach(c => {
+        if (c.id === target) {
+          c.classList.add("active");
+        } else if (platforms.includes(c.id)) {
+          c.classList.remove("active");
+        } else {
+          c.classList.remove("active");
+        }
+      });
+
+      document.querySelectorAll(".tab-buttons .tab-button").forEach(b => {
+        b.classList.toggle("active", b === btn);
+      });
+    });
+  });
+
+  // Import file input event listener
+  document.getElementById("import-file").addEventListener("change", importChecklist);
+
   loadChecklist();
   renderChart();
 });
 
-// ================================
-// UI Builders
-// ================================
-function createPlatformSection(platform) {
-  // Create tab button
-  const button = document.createElement("button");
-  button.textContent = platform;
-  button.addEventListener("click", () => showPlatform(platform));
-  platformTabs.appendChild(button);
-
-  // Create section
-  const section = document.createElement("section");
-  section.id = `${platform}-section`;
-
-  const heading = document.createElement("h2");
-  heading.textContent = platform;
-
-  const progress = document.createElement("div");
-  progress.className = "progress";
-  progress.id = `${platform}-progress`;
-
-  const list = document.createElement("ul");
-  list.id = `${platform}-games`;
-
-  const filter = document.createElement("select");
-  filter.innerHTML = `<option value="All">All</option>` +
-    statuses.map(s => `<option value="${s}">${s}</option>`).join("");
-  filter.addEventListener("change", () => filterGames(platform, filter.value));
-
-  section.appendChild(heading);
-  section.appendChild(progress);
-  section.appendChild(filter);
-  section.appendChild(list);
-  mainContent.appendChild(section);
-}
-
-// ================================
-// Game Management
-// ================================
 function addGame(title, platform, status, rating = "", year = "") {
   const ul = document.getElementById(`${platform}-games`);
+  if (!ul) return;
+
   const li = document.createElement("li");
 
+  // Checkbox for completed
   const checkbox = document.createElement("input");
   checkbox.type = "checkbox";
   checkbox.checked = status === "Completed";
   checkbox.addEventListener("change", () => {
     tag.textContent = checkbox.checked ? "Completed" : "Not Started";
+    tag.className = "tag " + getStatusClass(tag.textContent);
     updateProgress(platform);
     saveChecklist();
     renderChart();
   });
 
+  // Status tag
   const tag = document.createElement("span");
-  tag.className = "tag";
+  tag.className = "tag " + getStatusClass(status);
   tag.textContent = status;
 
+  // Game title text
+  const span = document.createElement("span");
+  span.textContent = title;
+  span.style.marginLeft = "10px";
+
+  // Rating input
   const ratingInput = document.createElement("input");
   ratingInput.type = "number";
   ratingInput.className = "rating-input";
@@ -76,21 +103,28 @@ function addGame(title, platform, status, rating = "", year = "") {
   ratingInput.max = 10;
   ratingInput.value = rating;
   ratingInput.placeholder = "Rating";
-  ratingInput.addEventListener("input", saveChecklist);
+  ratingInput.style.marginLeft = "10px";
+  ratingInput.addEventListener("input", () => {
+    saveChecklist();
+  });
 
+  // Year select (optional)
   const yearSelect = document.createElement("select");
   yearSelect.className = "year-input";
+  yearSelect.style.marginLeft = "10px";
   yearSelect.innerHTML = `<option value="">--</option>` +
     Array.from({ length: 30 }, (_, i) => 2010 + i)
       .map(y => `<option value="${y}" ${y == year ? "selected" : ""}>${y}</option>`)
       .join("");
-  yearSelect.addEventListener("change", saveChecklist);
+  yearSelect.addEventListener("change", () => {
+    saveChecklist();
+  });
 
-  const span = document.createElement("span");
-  span.textContent = title;
-
+  // Remove button
   const remove = document.createElement("button");
   remove.textContent = "✕";
+  remove.className = "remove-button";
+  remove.style.marginLeft = "10px";
   remove.addEventListener("click", () => {
     li.remove();
     updateProgress(platform);
@@ -100,38 +134,59 @@ function addGame(title, platform, status, rating = "", year = "") {
 
   li.append(checkbox, tag, span, ratingInput, yearSelect, remove);
   ul.appendChild(li);
+
   updateProgress(platform);
   saveChecklist();
   renderChart();
 }
 
-function filterGames(platform, status) {
-  const items = document.querySelectorAll(`#${platform}-games li`);
-  items.forEach(item => {
-    const tag = item.querySelector(".tag");
-    item.style.display = status === "All" || tag.textContent === status ? "" : "none";
-  });
+function getStatusClass(status) {
+  switch (status) {
+    case "Completed": return "tagCompleted";
+    case "Not Started": return "tagNotStarted";
+    case "In Progress": return "tagInProgress";
+    case "On Hold": return "tagOnHold";
+    default: return "";
+  }
 }
 
 function updateProgress(platform) {
   const items = document.querySelectorAll(`#${platform}-games li`);
   const total = items.length;
-  const completed = [...items].filter(item => item.querySelector("input").checked).length;
-  document.getElementById(`${platform}-progress`).textContent = `Completed ${completed} / ${total}`;
+  const completed = [...items].filter(item => item.querySelector("input[type='checkbox']").checked).length;
+  const progressEl = document.getElementById(`${platform}-progress`);
+  if (progressEl) {
+    progressEl.textContent = `Completed ${completed} / ${total}`;
+  }
 }
 
-// ================================
-// Platform Navigation
-// ================================
-function showPlatform(platform) {
-  platforms.forEach(p => {
-    document.getElementById(`${p}-section`).style.display = p === platform ? "" : "none";
+function saveChecklist() {
+  const data = { prefix: "gameBacklog" };
+  platforms.forEach(platform => {
+    const items = document.querySelectorAll(`#${platform}-games li`);
+    data[platform] = [...items].map(item => ({
+      title: item.querySelector("span:nth-of-type(2)").textContent,
+      status: item.querySelector(".tag").textContent,
+      rating: item.querySelector(".rating-input").value,
+      year: item.querySelector(".year-input").value
+    }));
+  });
+  localStorage.setItem("gameBacklog", JSON.stringify(data));
+}
+
+function loadChecklist() {
+  const data = JSON.parse(localStorage.getItem("gameBacklog"));
+  if (!data || data.prefix !== "gameBacklog") return;
+  platforms.forEach(platform => {
+    const ul = document.getElementById(`${platform}-games`);
+    if (!ul) return;
+    ul.innerHTML = "";
+    (data[platform] || []).forEach(game => {
+      addGame(game.title, platform, game.status, game.rating, game.year);
+    });
   });
 }
 
-// ================================
-// Import/Export
-// ================================
 function exportChecklist() {
   const data = { prefix: "gameBacklog" };
   platforms.forEach(platform => {
@@ -143,7 +198,6 @@ function exportChecklist() {
       year: item.querySelector(".year-input").value
     }));
   });
-
   const blob = new Blob([JSON.stringify(data)], { type: "application/json" });
   const url = URL.createObjectURL(blob);
   const a = document.createElement("a");
@@ -168,10 +222,9 @@ function importChecklist(event) {
 
       platforms.forEach(platform => {
         const ul = document.getElementById(`${platform}-games`);
+        if (!ul) return;
         ul.innerHTML = "";
-        (data[platform] || []).forEach(game =>
-          addGame(game.title, platform, game.status, game.rating, game.year)
-        );
+        (data[platform] || []).forEach(game => addGame(game.title, platform, game.status, game.rating, game.year));
       });
     } catch {
       alert("Failed to parse file.");
@@ -180,38 +233,7 @@ function importChecklist(event) {
   reader.readAsText(file);
 }
 
-// ================================
-// Local Storage
-// ================================
-function saveChecklist() {
-  const data = { prefix: "gameBacklog" };
-  platforms.forEach(platform => {
-    const items = document.querySelectorAll(`#${platform}-games li`);
-    data[platform] = [...items].map(item => ({
-      title: item.querySelector("span:nth-of-type(2)").textContent,
-      status: item.querySelector(".tag").textContent,
-      rating: item.querySelector(".rating-input").value,
-      year: item.querySelector(".year-input").value
-    }));
-  });
-  localStorage.setItem("gameBacklog", JSON.stringify(data));
-}
-
-function loadChecklist() {
-  const data = JSON.parse(localStorage.getItem("gameBacklog"));
-  if (!data || data.prefix !== "gameBacklog") return;
-  platforms.forEach(platform => {
-    const ul = document.getElementById(`${platform}-games`);
-    ul.innerHTML = "";
-    (data[platform] || []).forEach(game =>
-      addGame(game.title, platform, game.status, game.rating, game.year)
-    );
-  });
-}
-
-// ================================
-// Chart.js Donut Chart
-// ================================
+// Chart rendering (assuming you include Chart.js in your HTML)
 function renderChart() {
   const counts = { Completed: 0, "Not Started": 0, "In Progress": 0, "On Hold": 0 };
 
@@ -219,11 +241,13 @@ function renderChart() {
     const items = document.querySelectorAll(`#${platform}-games li`);
     items.forEach(item => {
       const status = item.querySelector(".tag").textContent;
-      counts[status]++;
+      counts[status] = (counts[status] || 0) + 1;
     });
   });
 
-  const ctx = document.getElementById("chart").getContext("2d");
+  const ctx = document.getElementById("statusChart")?.getContext("2d");
+  if (!ctx) return;
+
   if (window.statusChart) window.statusChart.destroy();
 
   window.statusChart = new Chart(ctx, {
@@ -232,7 +256,7 @@ function renderChart() {
       labels: Object.keys(counts),
       datasets: [{
         data: Object.values(counts),
-        backgroundColor: ["#a3be8c", "#bf616a", "#ebcb8b", "#88c0d0"]
+        backgroundColor: ["#4ADE80", "#949494", "#0EA5E9", "#84CC16"]
       }]
     },
     options: {
@@ -244,22 +268,3 @@ function renderChart() {
     }
   });
 }
-
-// ================================
-// Event Listeners
-// ================================
-document.getElementById("import-file").addEventListener("change", importChecklist);
-
-document.getElementById("add-game-form").addEventListener("submit", (e) => {
-  e.preventDefault();
-  const title = document.getElementById("game-title").value.trim();
-  const platform = document.getElementById("game-platform").value;
-  const status = document.getElementById("game-status").value;
-  const rating = document.getElementById("game-rating").value;
-  const year = document.getElementById("game-year").value;
-
-  if (!title || !platform || !status) return alert("Please fill out all required fields.");
-
-  addGame(title, platform, status, rating, year);
-  e.target.reset();
-});
