@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Gamelog Tracker</title>
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="styles.css" />
+</head>
+
+<body>
+  <!-- Sidebar -->
+  <aside id="sidebar">
+    <h1>Gamelog</h1>
+
+    <!-- Platform Tabs -->
+    <nav id="platform-tabs">
+      <button data-platform="PC">PC</button>
+      <button data-platform="PS5">PS5</button>
+      <button data-platform="Xbox">Xbox</button>
+      <button data-platform="Switch">Switch</button>
+    </nav>
+
+    <!-- Import/Export -->
+    <div class="import-export">
+      <input type="file" id="import-file" accept=".json" />
+      <button onclick="exportChecklist()">Export</button>
+    </div>
+
+    <!-- Add Game Form -->
+    <form id="add-game-form">
+      <input type="text" id="game-title-input" placeholder="Add a game..." />
+      <select id="platform-select">
+        <option value="PC">PC</option>
+        <option value="PS5">PS5</option>
+        <option value="Xbox">Xbox</option>
+        <option value="Switch">Switch</option>
+      </select>
+      <button type="submit">Add</button>
+    </form>
+  </aside>
+
+  <!-- Main Content -->
+  <main id="main-content">
+    <!-- Platform Lists -->
+    <section id="PC-section">
+      <h2>PC</h2>
+      <ul id="PC-games"></ul>
+    </section>
+
+    <section id="PS5-section">
+      <h2>PS5</h2>
+      <ul id="PS5-games"></ul>
+    </section>
+
+    <section id="Xbox-section">
+      <h2>Xbox</h2>
+      <ul id="Xbox-games"></ul>
+    </section>
+
+    <section id="Switch-section">
+      <h2>Switch</h2>
+      <ul id="Switch-games"></ul>
+    </section>
+  </main>
+
+  <!-- Templates -->
+  <template id="game-item-template">
+    <li>
+      <span class="title"></span>
+      <span class="tag"></span>
+
+      <select class="month-input">
+        <option value="">--</option>
+        <option value="Jan">Jan</option>
+        <option value="Feb">Feb</option>
+        <option value="Mar">Mar</option>
+        <option value="Apr">Apr</option>
+        <option value="May">May</option>
+        <option value="Jun">Jun</option>
+        <option value="Jul">Jul</option>
+        <option value="Aug">Aug</option>
+        <option value="Sep">Sep</option>
+        <option value="Oct">Oct</option>
+        <option value="Nov">Nov</option>
+        <option value="Dec">Dec</option>
+      </select>
+
+      <select class="year-input">
+        <option value="">--</option>
+        <!-- Populate dynamically in JS -->
+      </select>
+
+      <input class="rating-input" type="number" min="0" max="10" step="0.5" placeholder="Rating" />
+    </li>
+  </template>
+
+  <!-- Scripts -->
+  <script src="scripts.js"></script>
+</body>
+</html>
