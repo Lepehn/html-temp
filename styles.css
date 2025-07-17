@@ -175,26 +175,64 @@ select.month-input {
    Profile Editor
 =============================== */
 .modal {
+  display: none;
   position: fixed;
-  top: 0;
+  z-index: 1000;
   left: 0;
+  top: 0;
   width: 100%;
   height: 100%;
-  backdrop-filter: blur(4px);
-  background: rgba(0, 0, 0, 0.6);
-  z-index: 1000;
+  overflow: auto;
+  background-color: rgba(0,0,0,0.6);
 }
 
 .modal-content {
-  background: #1e1e1e;
+  background-color: #1e1e1e;
+  margin: 10% auto;
   padding: 20px;
-  border-radius: 8px;
-  width: 300px;
-  margin: 100px auto;
+  border: 1px solid #444;
+  width: 90%;
+  max-width: 400px;
   color: #fff;
   display: flex;
   flex-direction: column;
   gap: 10px;
+  border-radius: 8px;
+}
+
+.modal-content input[type="text"],
+.modal-content input[type="file"] {
+  background: #2a2a2a;
+  border: 1px solid #555;
+  color: #fff;
+  padding: 8px;
+}
+
+#modal-save {
+  background: #333;
+  border: none;
+  padding: 8px;
+  cursor: pointer;
+  color: #fff;
+  border-radius: 4px;
+}
+
+.close {
+  color: #aaa;
+  align-self: flex-end;
+  font-size: 24px;
+  cursor: pointer;
+}
+
+#open-profile-modal {
+  margin-top: 10px;
+  padding: 6px 12px;
+  font-size: 14px;
+  background: #333;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
 }
 
 /* ===============================
