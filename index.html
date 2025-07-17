@@ -21,22 +21,19 @@
         <h2>Lepehn</h2>
         <h3>@Lepehn</h3>
         <button id="edit-profile-btn">Edit Profile</button>
-        <div id="profile-editor" class="modal" style="display: none;">
+        <!-- Edit Profile Button -->
+        <button id="open-profile-modal">Edit Profile</button>
+        
+        <!-- Modal -->
+        <div id="profile-modal" class="modal">
           <div class="modal-content">
-            <label>
-              Display Name:
-              <input type="text" id="display-name-input">
-            </label>
-            <label>
-              Username:
-              <input type="text" id="username-input">
-            </label>
-            <label>
-              Background Image URL:
-              <input type="text" id="bg-url-input">
-            </label>
-            <button id="save-profile-btn">Save</button>
-            <button id="cancel-profile-btn">Cancel</button>
+            <span class="close" id="close-profile-modal">&times;</span>
+            <h2>Edit Profile</h2>
+            <input type="text" id="modal-name" placeholder="Display Name" />
+            <input type="text" id="modal-username" placeholder="Username" />
+            <label>Upload Background Image:</label>
+            <input type="file" id="modal-bg-upload" accept="image/*" />
+            <button id="modal-save">Save Changes</button>
           </div>
         </div>
       </div>
