@@ -369,6 +369,11 @@ body.light-mode .scrollable-list {
   scrollbar-color: #ccc #E5E5E5;
 }
 
+.content-section {
+  flex-grow: 1;
+  width: 100%;
+}
+
 /* ===============================
    Responsive
 =============================== */
