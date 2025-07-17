@@ -10,91 +10,167 @@
 </head>
 
 <body>
-  <!-- Sidebar -->
-  <aside id="sidebar">
-    <h1>Gamelog</h1>
+  <h1>Gamelog</h1>
 
-    <!-- Platform Tabs -->
-    <nav id="platform-tabs">
-      <button data-platform="PC">PC</button>
-      <button data-platform="PS5">PS5</button>
-      <button data-platform="Xbox">Xbox</button>
-      <button data-platform="Switch">Switch</button>
-    </nav>
+  <div class="content-container">
+    <!-- Sidebar Section -->
+    <div class="sidebar-wrapper">
+      <div class="sidebar">
+        <div class="profile-bg"></div>
+        <h2>Lepehn</h2>
+        <h3>@Lepehn</h3>
+      </div>
 
-    <!-- Import/Export -->
-    <div class="import-export">
-      <input type="file" id="import-file" accept=".json" />
-      <button onclick="exportChecklist()">Export</button>
+      <div class="tab-sidebar">
+        <div class="tab-box">
+          <div class="tab-buttons">
+            <!-- <div class="tab-button" onclick="toggleTheme()">☀️ Light /🌙 Dark Mode</div> -->
+            <div class="tab-button" data-target="ratings">Ratings</div>
+            <div class="tab-button" data-target="stats">Stats</div>
+            <div class="tab-button" onclick="exportChecklist()">Export Progress</div>
+            <div class="tab-button" onclick="importChecklist()">Import Progress <input type="file" id="import-file" style="display: none;" /></div>
+          </div>
+        </div>
+      </div>
     </div>
 
-    <!-- Add Game Form -->
-    <form id="add-game-form">
-      <input type="text" id="game-title-input" placeholder="Add a game..." />
-      <select id="platform-select">
-        <option value="PC">PC</option>
-        <option value="PS5">PS5</option>
-        <option value="Xbox">Xbox</option>
-        <option value="Switch">Switch</option>
-      </select>
-      <button type="submit">Add</button>
-    </form>
-  </aside>
+    <!-- Main Content Section -->
+    <div class="content-section">
+      <!-- Platform Navigation Tabs -->
+      <div class="tab-box2">
+        <div class="tab-buttons2">
+          <div class="tab-button" data-target="epic">Epic</div>
+          <div class="tab-button" data-target="nintendo">Nintendo</div>
+          <div class="tab-button" data-target="playstation">Playstation</div>
+          <div class="tab-button" data-target="steam">Steam</div>
+          <div class="tab-button" data-target="xbox">Xbox</div>
+        </div>
+      </div>
 
-  <!-- Main Content -->
-  <main id="main-content">
-    <!-- Platform Lists -->
-    <section id="PC-section">
-      <h2>PC</h2>
-      <ul id="PC-games"></ul>
-    </section>
+      <!-- Ratings Section -->
+      <div class="content" id="ratings">
+        <h2>Game Ratings</h2>
+        <div class="scrollable-list" id="ratings-list"></div>
+      </div>
 
-    <section id="PS5-section">
-      <h2>PS5</h2>
-      <ul id="PS5-games"></ul>
-    </section>
+      <!-- Stats Section -->
+      <div class="content" id="stats">
+        <h2>Game Status Overview</h2>
+        <div class="scrollable-list">
+          <div class="stats-chart">
+            <canvas id="statusChart" style="max-width: 250px; max-height: 250px;"></canvas>
+          </div>
+          <div class="stats-layout">
+            <div class="stats-text">
+              <div id="totalGames" style="margin-bottom: 10px; font-size: 1.1em;"></div>
+              <div id="statusBreakdown"></div>
 
-    <section id="Xbox-section">
-      <h2>Xbox</h2>
-      <ul id="Xbox-games"></ul>
-    </section>
+              <div style="margin-top: 20px;">
+                <div id="completed-by-year" style="margin-top: 20px;">
+                  <h2>Completed Games by Year</h2>
+                </div>
+                <div style="margin-bottom: 10px;"><h3>Platforms</h3></div>
+                <div id="platformBreakdown"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
 
-    <section id="Switch-section">
-      <h2>Switch</h2>
-      <ul id="Switch-games"></ul>
-    </section>
-  </main>
+      <!-- Platform Tabs -->
+      <!-- Each platform section includes a form, progress bar, and game list -->
+      <div class="content active" id="epic">
+        <h2>Epic Games</h2>
+        <form class="add-form" data-platform="epic">
+          <input type="text" placeholder="Add game title" required />
+          <select>
+            <option value="Not Started">Not Started</option>
+            <option value="In Progress">In Progress</option>
+            <option value="On Hold">On Hold</option>
+            <option value="Completed">Completed</option>
+          </select>
+          <button type="submit">Add</button>
+        </form>
+        <div id="epic-filters" class="tab-buttons2"></div>
+        <div class="progress" id="epic-progress">Completed 0 / 0</div>
+        <div class="scrollable-list">
+          <ul id="epic-games"></ul>
+        </div>
+      </div>
 
-  <!-- Templates -->
-  <template id="game-item-template">
-    <li>
-      <span class="title"></span>
-      <span class="tag"></span>
+      <div class="content" id="nintendo">
+        <h2>Nintendo</h2>
+        <form class="add-form" data-platform="nintendo">
+          <input type="text" placeholder="Add game title" required />
+          <select>
+            <option value="Not Started">Not Started</option>
+            <option value="In Progress">In Progress</option>
+            <option value="On Hold">On Hold</option>
+            <option value="Completed">Completed</option>
+          </select>
+          <button type="submit">Add</button>
+        </form>
+        <div class="progress" id="nintendo-progress">Completed 0 / 0</div>
+        <div class="scrollable-list">
+          <ul id="nintendo-games"></ul>
+        </div>
+      </div>
 
-      <select class="month-input">
-        <option value="">--</option>
-        <option value="Jan">Jan</option>
-        <option value="Feb">Feb</option>
-        <option value="Mar">Mar</option>
-        <option value="Apr">Apr</option>
-        <option value="May">May</option>
-        <option value="Jun">Jun</option>
-        <option value="Jul">Jul</option>
-        <option value="Aug">Aug</option>
-        <option value="Sep">Sep</option>
-        <option value="Oct">Oct</option>
-        <option value="Nov">Nov</option>
-        <option value="Dec">Dec</option>
-      </select>
+      <div class="content" id="playstation">
+        <h2>Playstation</h2>
+        <form class="add-form" data-platform="playstation">
+          <input type="text" placeholder="Add game title" required />
+          <select>
+            <option value="Not Started">Not Started</option>
+            <option value="In Progress">In Progress</option>
+            <option value="On Hold">On Hold</option>
+            <option value="Completed">Completed</option>
+          </select>
+          <button type="submit">Add</button>
+        </form>
+        <div class="progress" id="playstation-progress">Completed 0 / 0</div>
+        <div class="scrollable-list">
+          <ul id="playstation-games"></ul>
+        </div>
+      </div>
 
-      <select class="year-input">
-        <option value="">--</option>
-        <!-- Populate dynamically in JS -->
-      </select>
+      <div class="content" id="steam">
+        <h2>Steam</h2>
+        <form class="add-form" data-platform="steam">
+          <input type="text" placeholder="Add game title" required />
+          <select>
+            <option value="Not Started">Not Started</option>
+            <option value="In Progress">In Progress</option>
+            <option value="On Hold">On Hold</option>
+            <option value="Completed">Completed</option>
+          </select>
+          <button type="submit">Add</button>
+        </form>
+        <div class="progress" id="steam-progress">Completed 0 / 0</div>
+        <div class="scrollable-list">
+          <ul id="steam-games"></ul>
+        </div>
+      </div>
 
-      <input class="rating-input" type="number" min="0" max="10" step="0.5" placeholder="Rating" />
-    </li>
-  </template>
+      <div class="content" id="xbox">
+        <h2>Xbox</h2>
+        <form class="add-form" data-platform="xbox">
+          <input type="text" placeholder="Add game title" required />
+          <select>
+            <option value="Not Started">Not Started</option>
+            <option value="In Progress">In Progress</option>
+            <option value="On Hold">On Hold</option>
+            <option value="Completed">Completed</option>
+          </select>
+          <button type="submit">Add</button>
+        </form>
+        <div class="progress" id="xbox-progress">Completed 0 / 0</div>
+        <div class="scrollable-list">
+          <ul id="xbox-games"></ul>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <!-- Scripts -->
   <script src="scripts.js"></script>
