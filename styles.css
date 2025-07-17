@@ -63,6 +63,11 @@ li {
   margin: 5px 0;
 }
 
+.content-section {
+  flex-grow: 1;
+  width: 100%;
+}
+
 /* ===============================
    Form Inputs
 =============================== */
@@ -367,11 +372,6 @@ body.light-mode input {
 
 body.light-mode .scrollable-list {
   scrollbar-color: #ccc #E5E5E5;
-}
-
-.content-section {
-  flex-grow: 1;
-  width: 100%;
 }
 
 /* ===============================
