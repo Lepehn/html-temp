@@ -600,7 +600,7 @@
 	const usernameDisplay = document.getElementById("profile-username");
 	const profileBg = document.querySelector(".profile-bg");
 	
-	// Open modal
+	// Open modal and prefill with current values
 	openBtn.addEventListener("click", () => {
 	  modal.style.display = "block";
 	  nameInput.value = nameDisplay.textContent;
@@ -641,15 +641,15 @@
 	  modal.style.display = "none";
 	});
 	
-	// Load saved data on start
+	// Load saved data on startup
 	window.addEventListener("DOMContentLoaded", () => {
 	  const savedName = localStorage.getItem("profileName");
 	  const savedUsername = localStorage.getItem("profileUsername");
 	  const savedBg = localStorage.getItem("profileBg");
 	
-	  if (savedName) nameDisplay.textContent = savedName;
-	  if (savedUsername) usernameDisplay.textContent = savedUsername;
-	  if (savedBg) profileBg.style.backgroundImage = `url('${savedBg}')`;
+	  if (savedName && nameDisplay) nameDisplay.textContent = savedName;
+	  if (savedUsername && usernameDisplay) usernameDisplay.textContent = savedUsername;
+	  if (savedBg && profileBg) profileBg.style.backgroundImage = `url('${savedBg}')`;
 	});
       
       window.addEventListener("DOMContentLoaded", loadFromLocalStorage);
