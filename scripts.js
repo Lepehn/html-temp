@@ -585,5 +585,71 @@
         localStorage.setItem("theme", isLight ? "light" : "dark");
         toggleButton.textContent = isLight ? "🌞 Light / Dark Mode" : "🌙 Light / Dark Mode";
       }
+
+	const modal = document.getElementById("profile-modal");
+	const openBtn = document.getElementById("open-profile-modal");
+	const closeBtn = document.getElementById("close-profile-modal");
+	
+	const nameInput = document.getElementById("modal-name");
+	const usernameInput = document.getElementById("modal-username");
+	const bgUpload = document.getElementById("modal-bg-upload");
+	
+	const saveBtn = document.getElementById("modal-save");
+	
+	const nameDisplay = document.getElementById("profile-name");
+	const usernameDisplay = document.getElementById("profile-username");
+	const profileBg = document.querySelector(".profile-bg");
+	
+	// Open modal
+	openBtn.addEventListener("click", () => {
+	  modal.style.display = "block";
+	  nameInput.value = nameDisplay.textContent;
+	  usernameInput.value = usernameDisplay.textContent;
+	});
+	
+	// Close modal
+	closeBtn.addEventListener("click", () => {
+	  modal.style.display = "none";
+	});
+	
+	// Save changes
+	saveBtn.addEventListener("click", () => {
+	  const newName = nameInput.value.trim();
+	  const newUsername = usernameInput.value.trim();
+	  const file = bgUpload.files[0];
+	
+	  if (newName) {
+	    nameDisplay.textContent = newName;
+	    localStorage.setItem("profileName", newName);
+	  }
+	
+	  if (newUsername) {
+	    usernameDisplay.textContent = newUsername;
+	    localStorage.setItem("profileUsername", newUsername);
+	  }
+	
+	  if (file) {
+	    const reader = new FileReader();
+	    reader.onload = function (e) {
+	      const dataURL = e.target.result;
+	      profileBg.style.backgroundImage = `url('${dataURL}')`;
+	      localStorage.setItem("profileBg", dataURL);
+	    };
+	    reader.readAsDataURL(file);
+	  }
+	
+	  modal.style.display = "none";
+	});
+	
+	// Load saved data on start
+	window.addEventListener("DOMContentLoaded", () => {
+	  const savedName = localStorage.getItem("profileName");
+	  const savedUsername = localStorage.getItem("profileUsername");
+	  const savedBg = localStorage.getItem("profileBg");
+	
+	  if (savedName) nameDisplay.textContent = savedName;
+	  if (savedUsername) usernameDisplay.textContent = savedUsername;
+	  if (savedBg) profileBg.style.backgroundImage = `url('${savedBg}')`;
+	});
       
       window.addEventListener("DOMContentLoaded", loadFromLocalStorage);
