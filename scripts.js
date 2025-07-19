@@ -151,7 +151,22 @@
 	noteTextarea.placeholder = "Add note...";
 	noteTextarea.value = note;
 	noteTextarea.rows = 1; // start single line but user can resize vertically
-	
+	noteTextarea.style.display = "none"; // Hide initially      
+
+	// Create the "Add Note" toggle button
+	const noteToggleBtn = document.createElement("button");
+	noteToggleBtn.textContent = note ? "Edit Note" : "Add Note";
+	noteToggleBtn.style.marginLeft = "10px";
+	noteToggleBtn.addEventListener("click", () => {
+	if (noteTextarea.style.display === "none") {
+	noteTextarea.style.display = "block";
+	noteToggleBtn.textContent = "Hide Note";
+	} else {
+	noteTextarea.style.display = "none";
+	noteToggleBtn.textContent = noteTextarea.value ? "Edit Note" : "Add Note";
+	}
+	});
+
 	// Save on input
 	noteTextarea.addEventListener("input", () => {
 	saveToLocalStorage();
@@ -163,6 +178,7 @@
         li.appendChild(monthSelect);
         li.appendChild(removeBtn);    
         li.setAttribute("data-rating", rating || "");
+	li.appendChild(noteToggleBtn);      
 	li.appendChild(noteTextarea); // add this
         return li;
       }
