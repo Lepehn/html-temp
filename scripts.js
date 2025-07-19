@@ -156,8 +156,7 @@
 	// Create the "Add Note" toggle button
 	const noteToggleBtn = document.createElement("button");
 	noteToggleBtn.textContent = note ? "Edit Note" : "Add Note";
-	noteToggleBtn.classList.add("noteToggleBtn");      
-	noteToggleBtn.style.marginLeft = "10px";
+	noteToggleBtn.classList.add("noteToggleBtn");	  
 	noteToggleBtn.addEventListener("click", () => {
 	if (noteTextarea.style.display === "none") {
 	noteTextarea.style.display = "block";
