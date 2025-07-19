@@ -113,7 +113,8 @@ select.month-input {
   margin-top: 4px;
   width: fit-content;
   max-width: 800px;
-  min-width: 300px; 
+  min-width: 300px;
+  max-height: 100px;
   min-height: 27px;
   box-sizing: border-box;
   word-wrap: break-word;
@@ -342,7 +343,7 @@ select.month-input {
 }
 
 .noteToggleBtn:hover {
-  background: #383838;
+  background: #004A77;
   color: #fff;
 }
 
