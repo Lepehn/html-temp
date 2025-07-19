@@ -142,11 +142,25 @@
           saveToLocalStorage();
         });
 
+	// --- Editable note element ---
+	const note = document.createElement("div");
+	note.className = "tagnote";
+	note.contentEditable = true;
+	
+	const noteKey = `note-${platform}-${title}`.toLowerCase().replace(/\s+/g, "-");
+	const savedNote = localStorage.getItem(noteKey);
+	if (savedNote) note.textContent = savedNote;
+	
+	note.addEventListener("input", () => {
+	localStorage.setItem(noteKey, note.textContent.trim());
+	});
+
         li.appendChild(span);
         li.appendChild(tag);
         li.appendChild(yearSelect);
         li.appendChild(monthSelect);
         li.appendChild(removeBtn);
+	li.appendChild(note);      
         li.setAttribute("data-rating", rating || "");
         return li;
       }
