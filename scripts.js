@@ -31,7 +31,7 @@
             const monthSelect = item.querySelector('select.month-input');
             const rating = item.getAttribute("data-rating") || "";
             const status = tag?.value || "OnHold";
-	    const note = item.querySelector(".tagNote");
+	    const note = noteTextarea ? noteTextarea.value : "";
 
             return {
               title: item.querySelector("span").textContent,
@@ -58,7 +58,7 @@
             list.innerHTML = "";
             const sortedGames = (data[platform] || []).sort((a, b) => a.title.localeCompare(b.title));
             sortedGames.forEach((game) => {
-              const li = createGameItem(platform, game.title, game.status, game.year, game.month, game.rating, game.note);
+              const li = createGameItem(platform, game.title, game.status, game.year, game.month, game.rating, game.note || "");
               list.appendChild(li);
             });
             updateProgress(platform);
@@ -69,7 +69,7 @@
         }
       }
 
-      function createGameItem(platform, title, status, year = "", month = "", rating = "" note = "") {
+      function createGameItem(platform, title, status, year = "", month = "", rating = "", note = "") {
         const li = document.createElement("li");
         const span = document.createElement("span");
         span.textContent = title;
@@ -144,20 +144,28 @@
           saveToLocalStorage();
         });
 
-	// --- Editable note element ---
-	const note = document.createElement("div");
-	note.className = "tagNote";
-	note.contentEditable = true;
-	note.textContent = savedNote || "Add a note...";
-	note.addEventListener("input", () => saveChecklist());
+	// Create editable note textarea
+	const noteTextarea = document.createElement("textarea");
+	noteTextarea.classList.add("tagNote");
+	noteTextarea.placeholder = "Add note...";
+	noteTextarea.value = note;
+	noteTextarea.style.marginLeft = "10px";
+	noteTextarea.style.verticalAlign = "middle";
+	noteTextarea.rows = 1; // single line
+	noteTextarea.style.resize = "vertical";
+	noteTextarea.style.minWidth = "150px";
+	
+	noteTextarea.addEventListener("input", () => {
+	saveToLocalStorage();
+	});
 
         li.appendChild(span);
         li.appendChild(tag);
         li.appendChild(yearSelect);
         li.appendChild(monthSelect);
-        li.appendChild(removeBtn);
-	li.appendChild(note);      
+        li.appendChild(removeBtn);    
         li.setAttribute("data-rating", rating || "");
+	li.appendChild(noteTextarea); // add this
         return li;
       }
 
