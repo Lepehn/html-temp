@@ -31,7 +31,8 @@
             const monthSelect = item.querySelector('select.month-input');
             const rating = item.getAttribute("data-rating") || "";
             const status = tag?.value || "OnHold";
-	    const note = noteTextarea ? noteTextarea.value : "";
+	    const noteTextarea = item.querySelector(".tagNote");
+            const note = noteTextarea ? noteTextarea.value : "";
 
             return {
               title: item.querySelector("span").textContent,
@@ -144,17 +145,14 @@
           saveToLocalStorage();
         });
 
-	// Create editable note textarea
+	// Editable note textarea
 	const noteTextarea = document.createElement("textarea");
 	noteTextarea.classList.add("tagNote");
 	noteTextarea.placeholder = "Add note...";
 	noteTextarea.value = note;
-	noteTextarea.style.marginLeft = "10px";
-	noteTextarea.style.verticalAlign = "middle";
-	noteTextarea.rows = 1; // single line
-	noteTextarea.style.resize = "vertical";
-	noteTextarea.style.minWidth = "150px";
+	noteTextarea.rows = 1; // start single line but user can resize vertically
 	
+	// Save on input
 	noteTextarea.addEventListener("input", () => {
 	saveToLocalStorage();
 	});
