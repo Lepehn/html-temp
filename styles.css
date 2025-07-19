@@ -109,10 +109,10 @@ select.month-input {
   padding: 4px 8px;
   border-radius: 8px;
   display: block;
-  margin-left: 20px;
+  margin-left: 0px;
   margin-top: 4px;
   width: fit-content;
-  max-width: 100%;
+  max-width: 800px;
   box-sizing: border-box;
   word-wrap: break-word;
 }
