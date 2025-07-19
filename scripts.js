@@ -31,13 +31,15 @@
             const monthSelect = item.querySelector('select.month-input');
             const rating = item.getAttribute("data-rating") || "";
             const status = tag?.value || "OnHold";
+	    const note = item.querySelector(".tagNote");
 
             return {
               title: item.querySelector("span").textContent,
               status,
               year: yearSelect?.value || "",
               month: monthSelect?.value || "",
-              rating
+              rating,
+	      note
             };
           });
         });
@@ -56,7 +58,7 @@
             list.innerHTML = "";
             const sortedGames = (data[platform] || []).sort((a, b) => a.title.localeCompare(b.title));
             sortedGames.forEach((game) => {
-              const li = createGameItem(platform, game.title, game.status, game.year, game.month, game.rating);
+              const li = createGameItem(platform, game.title, game.status, game.year, game.month, game.rating, game.note);
               list.appendChild(li);
             });
             updateProgress(platform);
@@ -144,7 +146,7 @@
 
 	// --- Editable note element ---
 	const note = document.createElement("div");
-	note.className = "tagnote";
+	note.className = "tagNote";
 	note.contentEditable = true;
 	note.textContent = savedNote || "Add a note...";
 	note.addEventListener("input", () => saveChecklist());
