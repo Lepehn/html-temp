@@ -113,6 +113,7 @@ select.month-input {
   margin-top: 4px;
   width: fit-content;
   max-width: 800px;
+  min-width: 27px;
   box-sizing: border-box;
   word-wrap: break-word;
 }
