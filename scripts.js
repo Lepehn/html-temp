@@ -67,7 +67,7 @@
         }
       }
 
-      function createGameItem(platform, title, status, year = "", month = "", rating = "") {
+      function createGameItem(platform, title, status, year = "", month = "", rating = "" note = "") {
         const li = document.createElement("li");
         const span = document.createElement("span");
         span.textContent = title;
@@ -146,14 +146,8 @@
 	const note = document.createElement("div");
 	note.className = "tagnote";
 	note.contentEditable = true;
-	
-	const noteKey = `note-${platform}-${title}`.toLowerCase().replace(/\s+/g, "-");
-	const savedNote = localStorage.getItem(noteKey);
-	if (savedNote) note.textContent = savedNote;
-	
-	note.addEventListener("input", () => {
-	localStorage.setItem(noteKey, note.textContent.trim());
-	});
+	note.textContent = savedNote || "Add a note...";
+	note.addEventListener("input", () => saveChecklist());
 
         li.appendChild(span);
         li.appendChild(tag);
