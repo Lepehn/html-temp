@@ -147,7 +147,7 @@
 
 	// Editable note textarea
 	const noteTextarea = document.createElement("textarea");
-	noteTextarea.classList.add("tagNote");
+	noteTextarea.classList.add("tagNote");      
 	noteTextarea.placeholder = "Add note...";
 	noteTextarea.value = note;
 	noteTextarea.rows = 1; // start single line but user can resize vertically
@@ -156,6 +156,7 @@
 	// Create the "Add Note" toggle button
 	const noteToggleBtn = document.createElement("button");
 	noteToggleBtn.textContent = note ? "Edit Note" : "Add Note";
+	noteToggleBtn.classList.add("noteToggleBtn");      
 	noteToggleBtn.style.marginLeft = "10px";
 	noteToggleBtn.addEventListener("click", () => {
 	if (noteTextarea.style.display === "none") {
